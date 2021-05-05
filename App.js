@@ -4,6 +4,9 @@ import { StyleSheet, Text, View } from 'react-native';
 import * as Font from 'expo-font';
 import MealsNavigator from './Navigation/MealsNavigator';
 import { LogBox } from 'react-native';
+import { combineReducers, createStore } from 'redux';
+import MealsReducer from './store/reducers/Meals';
+import { Provider } from 'react-redux';
 LogBox.ignoreLogs(["Your project is accessing the following APIs from a deprecated global rather than a module import: Constants (expo-constants).",]);
 const fetchFonts=()=>{
   Font.loadAsync({
@@ -11,6 +14,10 @@ const fetchFonts=()=>{
     'open-sans-bold':require('./assets/fonts/OpenSans-Bold.ttf')
   });
 }
+
+const store=createStore(combineReducers({
+  meals:MealsReducer
+}))
 
 export default function App() {
   const [fontLoaded,setFontLoaded]=useState(false);
@@ -23,7 +30,7 @@ export default function App() {
     />
   }
   
-  return <MealsNavigator/>
+  return <Provider store={store}><MealsNavigator/></Provider>
 }
 
 const styles = StyleSheet.create({
